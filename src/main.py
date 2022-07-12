@@ -1,6 +1,8 @@
 # libraries
 import discord
 from discord.ext.commands import Bot
+from discord.ext import commands
+from discord.ext.commands.cooldowns import BucketType
 from os import getenv
 from online import keep_alive
 from json import dump, load
@@ -70,7 +72,7 @@ async def help(ctx):
 
 # balance
 @bot.command()
-async def bal(ctx):
+async def bal(ctx, user=None):
     balances = load(open(bal_file))
     idstr = str(ctx.message.author.id)
     if not (idstr in balances.keys()):
@@ -166,6 +168,7 @@ async def apply(ctx, job=None):
     dump(jobs, open(job_file, "w"))
 
 @job.command()
+@commands.cooldown(1, 20, commands.BucketType.user)
 async def work(ctx):
     jobs = load(open(job_file))
     idstr = str(ctx.message.author.id)
@@ -213,7 +216,18 @@ async def work(ctx):
                 color=embed_color
             )
             await ctx.reply(embed=embed)
-        
+
+# cooldown
+@work.error
+async def _error_work(ctx, error):
+    if isInstance(error, commands.CommandOnCooldown):
+        embed = discord.Embed(
+            title=f"***This command is on cooldown. Retry after {round(error.retry_after)} seconds.***",
+            color=embed_color
+        )
+        footer = "error: discord.ext.commands.CommandOnCooldown"
+        embed.set_footer(text=footer)
+        await ctx.reply(embed=embed)
 # run bot
 keep_alive()
 bot.run(getenv("token"))  # token is private for security reasons
