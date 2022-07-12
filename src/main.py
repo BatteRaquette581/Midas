@@ -72,12 +72,20 @@ async def help(ctx):
 
 # balance
 @bot.command()
-async def bal(ctx, user=None):
+async def bal(ctx, user:discord.User=None):
     balances = load(open(bal_file))
     idstr = str(ctx.message.author.id)
     if not (idstr in balances.keys()):
         balances[idstr] = 0
         dump(balances, open(bal_file, "w"))
+    if user != None:
+        embed = discord.Embed(
+            title=f"***{user}'s balance***",
+            description=f"Their current balance is: {str(balances[str(user.id)])}.",
+            color=embed_color
+        )
+        await ctx.reply(embed=embed)
+        return
     embed = discord.Embed(
         title=f"***{ctx.message.author}'s balance***",
         description=f"Your current balance is: {str(balances[idstr])} coins.",
@@ -220,7 +228,7 @@ async def work(ctx):
 # cooldown
 @work.error
 async def _error_work(ctx, error):
-    if isInstance(error, commands.CommandOnCooldown):
+    if isinstance(error, commands.CommandOnCooldown):
         embed = discord.Embed(
             title=f"***This command is on cooldown. Retry after {round(error.retry_after)} seconds.***",
             color=embed_color
@@ -228,6 +236,7 @@ async def _error_work(ctx, error):
         footer = "error: discord.ext.commands.CommandOnCooldown"
         embed.set_footer(text=footer)
         await ctx.reply(embed=embed)
+
 # run bot
 keep_alive()
 bot.run(getenv("token"))  # token is private for security reasons
