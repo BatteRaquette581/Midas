@@ -3,7 +3,6 @@
 # Release 0.2: Cryptocurrency Update (WIP)
 
 To do:
-- Add at least 5 jobs
 - Cryptocurrency simulation
 - Graph to show the price of the cryptocurrency
 - More in-depth help command
@@ -12,8 +11,11 @@ To do:
 - Make a custom profile picture for the bot
   
 Done:
-- See others' balance
+- Seeing others' balance
 - Cooldown on work command
+- Add at least 5 jobs
+- Unknown command
+- Preventing Midas from giving himself coins
 
 # Release 0.1: First Launch (Done, Released)
 
