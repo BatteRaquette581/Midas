@@ -4,10 +4,9 @@
 
 To do:
 - Cryptocurrency simulation
-- Graph to show the price of the cryptocurrency
+- Graph to show the current price of the cryptocurrency
 - More in-depth help command
 - Make working more fun and more diverse than simple operations
-- Make a custom profile picture for the bot
   
 Done:
 - Seeing others' balance
@@ -15,6 +14,7 @@ Done:
 - Add at least 5 jobs
 - Unknown command message
 - Preventing Midas from giving himself coins
+- Make a custom profile picture for the bot
 
 # Release 0.1: First Launch (Done, Released)
 
