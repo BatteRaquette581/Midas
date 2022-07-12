@@ -7,9 +7,13 @@ To do:
 - Cryptocurrency simulation
 - Graph to show the price of the cryptocurrency
 - More in-depth help command
-
+- Unknown command message
+- Make working more fun and more diverse than simple operations
+- Make a custom profile picture for the bot
+  
 Done:
-- Nothing
+- See others' balance
+- Cooldown on work command
 
 # Release 0.1: First Launch (Done, Released)
 
