@@ -10,4 +10,4 @@ An open-source economy bot made as a student project.
 - Working bot
 
 ### Upcoming: Release 0.2: Cryptocurrency Update:
-See (todo.md)[].
+See [the todo list](https://github.com/BatteRaquette581/Midas/todo.md).
