@@ -16,7 +16,12 @@ job_file = "jobs.json"
 job_list = {
     "Unemployed": {"Pay": 0, "Cost": 0}, 
     "Maid": {"Pay": 25, "Cost": 0}, 
-    "Youtuber": {"Pay": 40, "Cost": 500}
+    "Youtuber": {"Pay": 40, "Cost": 500},
+    "Teacher": {"Pay": 55, "Cost": 750},
+    "Software Engineer": {"Pay": 75, "Cost": 1100},
+    "School Principal": {"Pay": 90, "Cost": 1500},
+    "Senior Software Engineer": {"Pay": 100, "Cost": 2000},
+    "Entrepreneur": {"Pay": 125, "Cost": 4500}
 }
 intents = discord.Intents.default()
 intents.members = True
@@ -42,7 +47,10 @@ async def on_ready():
 # give random chance to win 1-10$
 @bot.event
 async def on_message(message):
+    await _add(message.author.id, 0)
     if int(time() * 1000) % 20 == 0: # i know, it's only pseudorandom
+        if message.author.id == 977627887530307604:
+            return
         amount = randint(1, 10)
         embed = discord.Embed(
             title=f"**Congratulations {message.author}, you just randomly won {amount} coins!**",
@@ -51,6 +59,18 @@ async def on_message(message):
         await _add(message.author.id, amount)
         await message.reply(embed=embed)
     await bot.process_commands(message) # process commands
+
+# unknown command
+@bot.event
+async def on_command_error(ctx, error):
+    embed = discord.Embed(
+        title="Uh oh, I don't know this one.",
+        description="Unknown command. Maybe you made a typo. You can get a list of commands with *$m help*.",
+        color=embed_color
+    )
+    footer = f"Error: discord.ext.commands.errors.CommandNotFound, Full Error: {str(error)}"
+    embed.set_footer(text=footer)
+    await ctx.reply(embed=embed)
 
 # new help command
 @bot.group()
@@ -122,6 +142,21 @@ async def list(ctx):
         - Youtuber:
             Salary: 40$ per task
             Requirements: Needs to have at least 500$ to apply
+        - Teacher:
+            Salary: 55$ per task
+            Requirements: Needs to have at least 750$ to apply
+        - Software Engineer:
+            Salary: 75$ per task
+            Requirements: Needs to have at least 1100$ to apply
+        - School Principal:
+            Salary: 90$ per task
+            Requirements: Needs to have at least 1500$ to apply
+        - Senior Software Engineer:
+            Salary: 100$ per task
+            Requirements: Needs to have at least 2000$ to apply
+        - Entrepreneur:
+            Salary: 125$ per task
+            Requirements: Needs to have at least 4500$ to apply
         
 More jobs coming soon!
         """,
@@ -133,8 +168,11 @@ More jobs coming soon!
 
 # apply for jobs
 @job.command()
-async def apply(ctx, job=None):
-    job = job.capitalize() if job else job
+async def apply(ctx, *job):
+    job_decomposed = []
+    for i in range(len(job)):
+        job_decomposed.append(job[i].capitalize())
+    job = " ".join(job_decomposed)
     jobs = load(open(job_file))
     balances = load(open(bal_file))
     idstr = str(ctx.message.author.id)
